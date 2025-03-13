@@ -1,4 +1,3 @@
-using Core;
 using Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,19 +17,15 @@ public class CustomerController : ControllerBase
     [HttpGet("{id}/{partitionKey}")]
     public async Task<IActionResult> GetById(string id, string partitionKey)
     {
-        var customer = await _customerService.GetCustomerByIdAsync(id, partitionKey);
-        if (customer == null)
-            return NotFound();
+        var result = await _customerService.GetCustomerByIdAsync(id, partitionKey);
 
-        return Ok(customer);
+        return result.Success ? Ok(result) : NotFound(result);
     }
     [HttpGet("{customerId}/products")]
     public async Task<IActionResult> GetCustomerWithProducts(string id, string customerId)
     {
-        var customer = await _customerService.GetCustomerWithProductsAsync(id, customerId);
-        if (customer == null)
-            return NotFound(new { message = "Customer not found" });
+        var result = await _customerService.GetCustomerWithProductsAsync(id, customerId);
 
-        return Ok(customer);
+        return result.Success ? Ok(result) : NotFound(result);
     }
 }

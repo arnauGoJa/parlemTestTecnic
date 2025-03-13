@@ -1,13 +1,14 @@
 ﻿using Domain.Entities;
+using Domain.Models;
 using Infrastructure;
 
 namespace Core
 {
     public class CustomerService
     {
-        private readonly IRepository<Customer> _customerRepository;
+        private readonly ICustomerRepository _customerRepository;
 
-        public CustomerService(IRepository<Customer> customerRepository)
+        public CustomerService(ICustomerRepository customerRepository)
         {
             _customerRepository = customerRepository;
         }
@@ -15,6 +16,10 @@ namespace Core
         public async Task<Customer?> GetCustomerByIdAsync(string id, string partitionKey)
         {
             return await _customerRepository.GetByIdAsync(id, partitionKey);
+        }
+        public async Task<CustomerProducts> GetCustomerWithProductsAsync(string customerId, string partitionKey)
+        {
+            return await _customerRepository.GetCustomerWithProductsAsync(customerId, partitionKey);
         }
 
         public async Task<IEnumerable<Customer>> GetAllCustomersAsync(string partitionKey)

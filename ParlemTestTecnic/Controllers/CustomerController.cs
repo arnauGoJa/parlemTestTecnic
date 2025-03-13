@@ -23,4 +23,13 @@ public class CustomerController : ControllerBase
 
         return Ok(customer);
     }
+    [HttpGet("{customerId}/products")]
+    public async Task<IActionResult> GetCustomerWithProducts(string customerId, string partitionKey)
+    {
+        var customer = await _customerService.GetCustomerWithProductsAsync(customerId,partitionKey);
+        if (customer == null)
+            return NotFound(new { message = "Customer not found" });
+
+        return Ok(customer);
+    }
 }

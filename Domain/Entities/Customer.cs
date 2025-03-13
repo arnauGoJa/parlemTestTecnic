@@ -7,9 +7,10 @@
     string docType,
     string docNum,
     string email,
-    int customerId,     
+    string customerId,     
       string givenName,
         string familyName1,
-          string phone
+          string phone,
+        string type
     );
 }

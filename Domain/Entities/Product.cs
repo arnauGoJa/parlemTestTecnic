@@ -8,7 +8,7 @@
     string productTypeName,
     int numeracioTerminal,
      DateTime soldAt,
-          int customerId
-
+          string customerId,
+           string type
     );
 }

@@ -13,7 +13,6 @@ namespace Domain.Models
             this.customerId = costumer.customerId;
             this.phone = costumer.phone;
             this.familyName1 = costumer.familyName1;
-            this.partitionKey = costumer.partitionKey;
             this.docType = costumer.docType;
             this.givenName = costumer.givenName;
 

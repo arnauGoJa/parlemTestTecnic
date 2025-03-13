@@ -1,7 +1,7 @@
 ﻿using Domain.Entities;
 using Microsoft.Azure.Cosmos;
 
-namespace Infrastructure
+namespace Infrastructure.Repositories
 {
     public class ProductRepository : CosmosRepository<Product>
     {

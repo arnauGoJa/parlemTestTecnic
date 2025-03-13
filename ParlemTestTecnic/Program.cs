@@ -1,6 +1,8 @@
 using Core;
 using Domain.Entities;
+using Domain.Interfaces;
 using Infrastructure;
+using Infrastructure.Repositories;
 using Microsoft.Azure.Cosmos;
 using System.Net;
 using PartitionKey = Microsoft.Azure.Cosmos.PartitionKey;
@@ -31,25 +33,25 @@ Database database = await cosmosClient.CreateDatabaseIfNotExistsAsync(
 );
 Container container = await database.CreateContainerIfNotExistsAsync(
     id: containerName,
-partitionKeyPath: "/partitionKey",
+partitionKeyPath: "/customerId",
     throughput: 400);
 
 try
 {
 
-    ItemResponse<Customer> response = await container.ReadItemAsync<Customer>("555555", new PartitionKey("customer_11111"));
+    ItemResponse<Customer> response = await container.ReadItemAsync<Customer>("555555", new PartitionKey("11111"));
 }
 catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
 {
-    Customer customer = new("555555", "customer_11111", "nif", "11223344E", "it@parlem.com", "11111", "Enriqueta", "Parlem", "668668668", "customer");
+    Customer customer = new("555555", "nif", "11223344E", "it@parlem.com", "11111", "Enriqueta", "Parlem", "668668668", "customer");
     Customer createdCostumer = await container.CreateItemAsync(
         item: customer,
-          partitionKey: new PartitionKey("customer_11111")
+          partitionKey: new PartitionKey("11111")
     );
-    Product product = new("1111111", "customer_11111", "FIBRA 1000 ADAMO", "ftth", 933933933, DateTime.Parse("2019-01-09 14:26:17"), "11111", "product");
+    Product product = new("1111111", "FIBRA 1000 ADAMO", "ftth", 933933933, DateTime.Parse("2019-01-09 14:26:17"), "11111", "product");
     Product createdProduct = await container.CreateItemAsync(
         item: product,
-          partitionKey: new PartitionKey("customer_11111")
+          partitionKey: new PartitionKey("11111")
     );
 }
 
@@ -59,7 +61,8 @@ builder.Services.AddScoped<ICustomerRepository>(provider =>
     new CustomerRepository(cosmosClient, databaseName, containerName));
 builder.Services.AddScoped<IRepository<Product>>(provider =>
     new ProductRepository(cosmosClient, databaseName, containerName));
-builder.Services.AddScoped<CustomerService, CustomerService>();
+builder.Services.AddSingleton<ICustomerValidator, CustomerValidator>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

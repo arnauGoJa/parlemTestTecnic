@@ -3,7 +3,6 @@
     public record Customer(
 
         string id,
-        string partitionKey,
     string docType,
     string docNum,
     string email,

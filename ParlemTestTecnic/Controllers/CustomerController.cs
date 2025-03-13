@@ -1,4 +1,5 @@
 using Core;
+using Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ParlemTestTecnic.Controllers;
@@ -7,9 +8,9 @@ namespace ParlemTestTecnic.Controllers;
 [Route("api/customers")]
 public class CustomerController : ControllerBase
 {
-    private readonly CustomerService _customerService;
+    private readonly ICustomerService _customerService;
 
-    public CustomerController(CustomerService customerService)
+    public CustomerController(ICustomerService customerService)
     {
         _customerService = customerService;
     }
@@ -24,9 +25,9 @@ public class CustomerController : ControllerBase
         return Ok(customer);
     }
     [HttpGet("{customerId}/products")]
-    public async Task<IActionResult> GetCustomerWithProducts(string customerId, string partitionKey)
+    public async Task<IActionResult> GetCustomerWithProducts(string id, string customerId)
     {
-        var customer = await _customerService.GetCustomerWithProductsAsync(customerId,partitionKey);
+        var customer = await _customerService.GetCustomerWithProductsAsync(id, customerId);
         if (customer == null)
             return NotFound(new { message = "Customer not found" });
 

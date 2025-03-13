@@ -1,0 +1,6 @@
+@ParlemTestTecnic_HostAddress = http://localhost:5001
+
+GET {{ParlemTestTecnic_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
